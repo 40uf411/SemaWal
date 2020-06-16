@@ -1,0 +1,5 @@
+node_1,is_a,node_2,0,1
+node_2,has,node_3,1,1
+node_3,part_of,node_4,1,0
+node_4,contain,test,0,0
+node_5,extends,node_1,1,0
