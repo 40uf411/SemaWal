@@ -9,8 +9,8 @@ SemaWal is a semantic network resolver in python
 Features |   value
 ---------|---------------------------------------------------------------------------------
 Authors  | [Authors.md](https://github.com/40uf411/SemaWal/master/AUTHORS.md)
-Release  | 0.1
-License  |[Apache 2.0](https://github.com/40uf411/SemaWal/master/LICENSE)
+Release  | 0.1 (20.08)
+License  |[GPL](https://github.com/40uf411/SemaWal/master/LICENSE)
 Tracker  |[40uf411/arrand/Issues](https://github.com/40uf411/SemaWal/issues)
 Source  |[Github](http://github.com/40uf411/SemaWal)
 Feedbacks  |[Comments](https://github.com/40uf411/SemaWal/)
@@ -37,27 +37,30 @@ In addition to extracting knowledge (mainly relations) between two or more nodes
 	* Check if two given nodes are connected through a path of nodes.
 	* Check if two given nodes are connected through a path of nodes by a given relation.
 	* Draw a path between two given nodes.
+	
+### In progress features
+* A GUI interface
+* Nodes properties
+* An option to ignore certain relations
 
 ### Usage
-<!--
 ### install
 ```shell
-pip install arrand
+pip install semawal
 ```
 #### [requirement]
 ```
-pyarabic>=0.6.8
 ```
--->
+
 #### import
 ```python
->>> from node import Node
->>> from net import Net
->>> from csv_parser import parser
+>>> from semawal.node import Node
+>>> from semawal.net import Net
+>>> from semawal.csv_parser import parser
 ```
 ## Examples
 
-Detailed examples and features in [test.py](test.py) 
+Detailed examples and features in [test.py](tests/test.py) 
 
 *  Creating nodes
 ```python
@@ -159,7 +162,3 @@ Printing the path:
 A       |   ['is']      |   B
 ```
 
-### On progress features
-* A GUI interface
-* Nodes properties
-* An option to ignore certain relations
