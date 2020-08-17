@@ -38,6 +38,12 @@ In addition to extracting knowledge (mainly relations) between two or more nodes
 	* Check if two given nodes are connected through a path of nodes by a given relation.
 	* Draw a path between two given nodes.
 
+### In progress features
+* A GUI interface
+* Nodes properties
+* An option to ignore certain relations
+
+
 ### Usage
 ### install
 ```shell
@@ -157,7 +163,3 @@ Printing the path:
 A       |   ['is']      |   B
 ```
 
-### On progress features
-* A GUI interface
-* Nodes properties
-* An option to ignore certain relations
