@@ -7,11 +7,11 @@ nodeA = Node(name="A")
 nodeB = Node(name="B")
 nodeC = Node(name="C")
 nodeA.mutual_link(attribute="is", node=nodeB, mode=1, power=1)
-nodeB.extends(nodeC)
+nodeA.extends(nodeC)
 
 myNet.add(nodeA, nodeB, nodeC)
 
-print(myNet.getNodeskeys())
+n = parser.read("link_test.csv")
 
 # n = parser.read("link_test.csv")
 # n.randomSearch()

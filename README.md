@@ -4,7 +4,7 @@ SemaWal is a semantic network resolver in python
 <!--![arrand logo](doc/arrand_header.png  "arrand logo")-->
 <!--![PyPI - Downloads](https://img.shields.io/pypi/dm/arrand)-->
 
-  Developpers:  Ali AOUF
+  Developper:  Ali AOUF
 
 Features |   value
 ---------|---------------------------------------------------------------------------------
@@ -20,9 +20,6 @@ Accounts  |[@Twitter](https://twitter.com/40uf411))
 
 SemaWal Is a semantic network resolver developed as a python library. It allows the creation of networks through manual coding or a CSV file. It supports many types of connections between nodes.
 In addition to extracting knowledge (mainly relations) between two or more nodes in a network, it can find paths between nodes in a given network.
-
-
-
 
 ###  Features:
 * Support for multi-relations(connections between nodes).
@@ -60,7 +57,7 @@ pyarabic>=0.6.8
 ```
 ## Examples
 
-Detailed examples and features in [test.py](test.pt) 
+Detailed examples and features in [test.py](test.py) 
 
 *  Creating nodes
 ```python
@@ -108,6 +105,12 @@ True
 [!] Created network MyNet
 ```
 
+*  Importing a network from a csv file
+```python
+>>> n = parser.read("link_test.csv")
+[!] Created network  link_test
+```
+
 *  Adding a node to a network
 ```python
 >>> myNet.add(nodeA, nodeB, nodeC)
@@ -131,3 +134,32 @@ A       |   is  |   B  mode:  1  strict:  1
 A       |   extends     |   C  mode:  1  strict:  1
 B       |   is  |   A  mode:  1  strict:  1
 ```
+
+*  Fetching all the relations in a starting from a giving node until reaching a given depth
+```python
+>>> myNet.search(node=nodeB, depth=3)
+B       |   is  |   A  mode:  1  strict:  1
+A       |   is  |   B  mode:  1  strict:  1
+A       |   extends     |   C  mode:  1  strict:  1
+```
+
+* Get the path that relats two nodes
+```python
+>>> myNet.areConnected(nodeA=nodeA, nodeB=nodeB)
+B       |   is  |   A  mode:  1  strict:  1
+A       |   is  |   B  mode:  1  strict:  1
+[<node.Node object at 0x7f0571bbb4c0>, <node.Node object at 0x7f0571ac2310>]
+>>> # that was [nodeA, nodeB]
+```
+
+* Printing the path that relats two nodes
+```python
+>>> myNet.drawPath(nodeA=nodeA, nodeB=nodeB)
+Printing the path:
+A       |   ['is']      |   B
+```
+
+### On progress features
+* A GUI interface
+* Nodes properties
+* An option to ignore certain relations
