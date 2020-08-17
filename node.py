@@ -4,11 +4,12 @@ class Node(object):
     links = dict()
     properties = dict()
 
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, name):
+        self.value = name
         self.legacy = dict()
         self.links = dict()
         self.properties = dict()
+        print("[!] Created node ", name)
 
     def __str__(self):
         return self.value
@@ -127,11 +128,11 @@ class Node(object):
                     r.append(key)
         return r
     
-    def answer(self, question, node, mode=1):
+    def check(self, attribute, node, mode=1):
         rlnk = self.__r()
-        if question not in rlnk.keys():
+        if attribute not in rlnk.keys():
             return False
-        for nd in rlnk[question]:
+        for nd in rlnk[attribute]:
             if node == nd[0] and nd[1] == mode:
                 return True
         return False

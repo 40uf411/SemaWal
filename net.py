@@ -7,6 +7,7 @@ class Net(object):
     def __init__(self, name="Network"):
         self.nodes = dict()
         self.value = name
+        print("[!] Created network ", name)
 
     def __str__(self):
         return self.value

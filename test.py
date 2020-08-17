@@ -1,12 +1,21 @@
 from node import Node
 from net import Net
 from csv_parser import parser
-import re
 
+myNet = Net(name="myNet")
+nodeA = Node(name="A")
+nodeB = Node(name="B")
+nodeC = Node(name="C")
+nodeA.mutual_link(attribute="is", node=nodeB, mode=1, power=1)
+nodeB.extends(nodeC)
 
-n = parser.read("link_test.csv")
-n.randomSearch()
-print("")
+myNet.add(nodeA, nodeB, nodeC)
+
+print(myNet.getNodeskeys())
+
+# n = parser.read("link_test.csv")
+# n.randomSearch()
+# print("")
 # n0 = Node("node0")
 
 # n1 = Node("node1")
