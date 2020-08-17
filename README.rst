@@ -65,6 +65,13 @@ Features:
       a given relation.
    -  Draw a path between two given nodes.
 
+In progress features
+~~~~~~~~~~~~~~~~~~~~
+
+-  A GUI interface
+-  Nodes properties
+-  An option to ignore certain relations
+
 Usage
 ~~~~~
 
@@ -203,9 +210,3 @@ Detailed examples and features in `test.py <tests/test.py>`__
        Printing the path:
        A       |   ['is']      |   B
 
-On progress features
-~~~~~~~~~~~~~~~~~~~~
-
--  A GUI interface
--  Nodes properties
--  An option to ignore certain relations
