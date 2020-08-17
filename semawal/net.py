@@ -1,5 +1,7 @@
+#!/usr/bin/python
+# -*- coding=utf-8 -*-
 #TODO make it so that a node can have a relation with a network
-from node import Node
+from .node import Node
 
 class Net(object):
     value = ""

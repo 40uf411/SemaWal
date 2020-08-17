@@ -39,25 +39,23 @@ In addition to extracting knowledge (mainly relations) between two or more nodes
 	* Draw a path between two given nodes.
 
 ### Usage
-<!--
 ### install
 ```shell
-pip install arrand
+pip install semawal
 ```
 #### [requirement]
 ```
-pyarabic>=0.6.8
 ```
--->
+
 #### import
 ```python
->>> from node import Node
->>> from net import Net
->>> from csv_parser import parser
+>>> from semawal.node import Node
+>>> from semawal.net import Net
+>>> from semawal.csv_parser import parser
 ```
 ## Examples
 
-Detailed examples and features in [test.py](test.py) 
+Detailed examples and features in [test.py](tests/test.py) 
 
 *  Creating nodes
 ```python
