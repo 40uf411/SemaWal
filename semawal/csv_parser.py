@@ -1,5 +1,7 @@
-from node import Node
-from net import Net
+#!/usr/bin/python
+# -*- coding=utf-8 -*-
+from .node import Node
+from .net import Net
 import csv
 import os
 import re
@@ -7,20 +9,19 @@ import re
 class parser(object):
     
     @staticmethod
-    def read(file):
-        print(os.path.dirname(__file__) + "/net/" + file)
-        if not file.endswith('.csv'):
+    def read(filename):
+        if not filename.endswith('.csv'):
             return False
-        if not os.path.isfile(os.path.dirname(__file__) + "/net/" + file):
+        if not os.path.isfile(filename):
             return False
-
-        with open(os.path.dirname(__file__) + "/net/" + file) as csv_file:
+        with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             nodes = dict()
             nodeList = list()
             csv_content = list()
 
             for row in csv_reader:
+                print(row)
                 csv_content.append(row)
                 nodeList.append(row[0])
                 nodeList.append(row[2])
@@ -38,7 +39,7 @@ class parser(object):
                 else:
                     nodes[row[0]].link(row[1], nodes[row[2]], row[3], row[4])
 
-        n = Net(file[:-4])
+        n = Net(filename[:-4])
 
         for node in nodes.items():
             n.add(node[1])
