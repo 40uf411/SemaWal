@@ -9,8 +9,8 @@ SemaWal is a semantic network resolver in python
 Features |   value
 ---------|---------------------------------------------------------------------------------
 Authors  | [Authors.md](https://github.com/40uf411/SemaWal/master/AUTHORS.md)
-Release  | 0.1
-License  |[Apache 2.0](https://github.com/40uf411/SemaWal/master/LICENSE)
+Release  | 0.1 (20.08)
+License  |[GPL](https://github.com/40uf411/SemaWal/master/LICENSE)
 Tracker  |[40uf411/arrand/Issues](https://github.com/40uf411/SemaWal/issues)
 Source  |[Github](http://github.com/40uf411/SemaWal)
 Feedbacks  |[Comments](https://github.com/40uf411/SemaWal/)
