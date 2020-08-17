@@ -1,54 +1,47 @@
-# Semantic-network-resolver
-semantic network resolver in python
+# SemaWal Semantic network resolver
+SemaWal is a semantic network resolver in python
 
 <!--![arrand logo](doc/arrand_header.png  "arrand logo")-->
-<!-![PyPI - Downloads](https://img.shields.io/pypi/dm/arrand)-->
+<!--![PyPI - Downloads](https://img.shields.io/pypi/dm/arrand)-->
 
   Developpers:  Ali AOUF
 
-  
 Features |   value
 ---------|---------------------------------------------------------------------------------
-Authors  | [Authors.md](https://github.com/linuxscout/arrand/master/AUTHORS.md)
+Authors  | [Authors.md](https://github.com/40uf411/SemaWal/master/AUTHORS.md)
 Release  | 0.1
-License  |[GPL](https://github.com/linuxscout/arrand/master/LICENSE)
-Tracker  |[linuxscout/arrand/Issues](https://github.com/linuxscout/arrand/issues)
-Source  |[Github](http://github.com/linuxscout/arrand)
-Feedbacks  |[Comments](https://github.com/linuxscout/arrand/)
-Accounts  |[@Twitter](https://twitter.com/linuxscout))
+License  |[Apache 2.0](https://github.com/40uf411/SemaWal/master/LICENSE)
+Tracker  |[40uf411/arrand/Issues](https://github.com/40uf411/SemaWal/issues)
+Source  |[Github](http://github.com/40uf411/SemaWal)
+Feedbacks  |[Comments](https://github.com/40uf411/SemaWal/)
+Accounts  |[@Twitter](https://twitter.com/40uf411))
 
 ## Description
 
-Arrand: random Arabic text generator
+SemaWal Is a semantic network resolver developed as a python library. It allows the creation of networks through manual coding or a CSV file. It supports many types of connections between nodes.
+In addition to extracting knowledge (mainly relations) between two or more nodes in a network, it can find paths between nodes in a given network.
+
+
 
 
 ###  مزايا:
-* توليد نص 
-    * نص بلا معنى    
-    * جملة مفيدة
-* عبارات خاصة
-    * نص بلا معنى
-    * آية
-    * حديث
-    * أمثال
-    * بيت شعري
-* خيارات
-    * تشكيل دون تشكيل
-    * طول معين
-    * عدد أسطر
-    * عدد فقرات
-    * مجال معين
-    * عدد كلمات معين
-* بناء مولد عشوائي للجمل دون معنى من ملف
-
-
- 
-
-
-
+* Support for multi-relations(connections between nodes).
+* Support for three types of relations: Strict, regular, extend(inheritance).
+* Support for CSV files.
+* Support for Sub-networks.
+* Node functions:
+	* Fetch all the related nodes and all the relations that a given node has. 
+	* Fetch nodes that are related to a given node.	
+	* Fetch relations that relate two given nodes has.
+	* Fetch all the relations that a network contains.
+	* Fetch all the relations you can get starting from a given node until reaching a given depth.
+	* Check if two given nodes are directly connected by a given relation.
+	* Check if two given nodes are connected through a path of nodes.
+	* Check if two given nodes are connected through a path of nodes by a given relation.
+	* Draw a path between two given nodes.
 
 ### Usage
-
+<!--
 ### install
 ```shell
 pip install arrand
@@ -57,7 +50,7 @@ pip install arrand
 ```
 pyarabic>=0.6.8
 ```
-
+-->
 #### import
 ```python
 >>> import arrand.arrandom
