@@ -1,0 +1,3 @@
+node_1,is_a,node_0,1,1
+node_2,extends,node_1,1,1
+node_2,is_a,node_0,0,0

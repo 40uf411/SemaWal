@@ -30,9 +30,7 @@ class Net(object):
     def getNode(self, nodeName):
         return self.nodes[nodeName]
 
-    def search(self, node, depth=2, visited_nodes = []):
-        if type(node) is str:
-            node = self.getNode(node)
+    def search(self, node, depth=0, visited_nodes = []):
         node.showLinks()
         visited_nodes.append(node)
         items = self.nodes.values()

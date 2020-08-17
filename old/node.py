@@ -50,7 +50,7 @@ class Node(object):
 
     def extends(self, node):
         self.legacy = node.links
-        self.links["extends"] = [[node,1,1]]
+        self.links["extends"] = [node,1,1]
 
     def check_relation(self, r1, r2):
         if r1[0] != r2[0]:

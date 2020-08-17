@@ -8,6 +8,7 @@ class parser(object):
     
     @staticmethod
     def read(file):
+        print(os.path.dirname(__file__) + "/net/" + file)
         if not file.endswith('.csv'):
             return False
         if not os.path.isfile(os.path.dirname(__file__) + "/net/" + file):
@@ -20,7 +21,6 @@ class parser(object):
             csv_content = list()
 
             for row in csv_reader:
-                print(row)
                 csv_content.append(row)
                 nodeList.append(row[0])
                 nodeList.append(row[2])

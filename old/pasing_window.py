@@ -287,6 +287,7 @@ class MyApp(object):
         """"""
         self.hide()
         text = self.fle.get()
+        print(text)
         net  = parser.read(text)
         if net:
             subFrame = OtherFrame(self,net)

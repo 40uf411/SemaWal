@@ -3,28 +3,31 @@ from net import Net
 from csv_parser import parser
 import re
 
+n = parser.read("net.csv")
 
-n = parser.read("link_test.csv")
-n.randomSearch()
 print("")
-# n0 = Node("node0")
 
-# n1 = Node("node1")
-# n2 = Node("node2")
-# n3 = Node("node3")
 
-# n1.link('is', n0, 1, 0)
-# n2.extends(n1)
-# n2.link('is', n0, 0, 0)
-# n3.extends(n1)
-# n3.link('is', n0, 1, 0)
+# n1 = Node("node_1")
+# n2 = Node("node_2")
+# n3 = Node("node_3")
+# n4 = Node("node_4")
 
-# net0 = Net()
-# net0.add(n0)
-# net0.add(n1)
-# net0.add(n2)
-# net0.add(n3)
-# net0.randomSearch()
+# n1.link("is", n2, 1, 1)
+# n2.link("is", n3, 1, 1)
+# n3.link("is", n4, 0, 1)
+# n4.link("is", n1, 1, 1)
+
+# n = Net("test_net")
+# n.add(n1)
+# n.add(n2)
+# n.add(n3)
+# n.add(n4)
+# n1.link("has", n)
+# n.randomSearch()
+
+
+
 # print("------------- node 1")
 # n1.showLinks()
 # print("------------- node 2")
