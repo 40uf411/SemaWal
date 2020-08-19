@@ -1,18 +1,26 @@
 class Node(object):
-    value = ""
-    legacy = dict()
-    links = dict()
-    properties = dict()
-
-    def __init__(self, name):
-        self.value = name
+    
+    def __init__(self, name, props={}, type="regular"):
+        """
+        type in ["regular", "root", "leaf"]
+        """
+        self.__name = name
         self.legacy = dict()
         self.links = dict()
-        self.properties = dict()
+        if type(props) != type({}):
+            print('[*] Node propreties should be of type Dict.')
+            self.properties = dict()
+        else:
+            self.properties = props
+        if type in ["regular", "root", "leaf"]:
+            self.type = type
+        attribute = ""
+        mode=1
+        power=1
         print("[!] Created node ", name)
 
     def __str__(self):
-        return self.value
+        return self.__name
 
     def __r(self):
         d = dict()
@@ -49,7 +57,26 @@ class Node(object):
     def r(self):
         return self.__r()
 
+    def rename(newname):
+        self.__name = newname
+        return self
+
+    def addProp(key, value):
+        return self
+
+    def dropProp(key):
+        return self
+
+    def getProp(key):
+        pass
+
+    def checkProp(key, value):
+        pass
+
     def extends(self, node):
+        if length(self.links) > 0:
+            print('[*] Node ', self.name, " can't extend another node since it already has links with other nodes.")
+            return self
         self.legacy = node.links
         self.links["extends"] = [[node,1,1]]
 
@@ -80,7 +107,7 @@ class Node(object):
                 co=co+1
 
             if c == -1:
-                print("Cant link", self.value, " to ", node.value,  " using relation: '", attribute,"', a legacy strict link exist.")
+                print("Cant link", self.__name, " to ", node.__name,  " using relation: '", attribute,"', a legacy strict link exist.")
                 return False
             if c == 0:
                 if attribute not in self.links.keys():
@@ -95,10 +122,22 @@ class Node(object):
                         e[2] = power
                         return True
                 self.links[attribute].append([node, mode, power])
-                
+        
+        return self;
+
+    def andWith(self, node, attribute="", mode="", power=""):
+        if attribute == "":
+            attribute = self.attribute
+        if mode=="":
+            mode = self.mode
+        if power=="":
+            power = self.power
+        
+        return self.link(attribute=attribute, node=node, mode=mode, power=power)
+
     def mutual_link(self, attribute, node, mode=1, power=1):
-        self.link(attribute=attribute, node= node, mode=mode, power=power)
-        node.link(attribute, self, mode, power)
+        node.link(attribute=attribute, node=self,  mode=mode, power=power)
+        return self.link(attribute=attribute, node= node, mode=mode, power=power)
 
     def showLinks(self):
         rlnk = self.__r()
@@ -107,7 +146,7 @@ class Node(object):
                 n = elem[0]
                 mode = elem[1]
                 power = elem[2]
-                print(self.value, "\t|  ", key , "\t|  ", n, " mode: ", mode, " strict: ", power) 
+                print(self.__name, "\t|  ", key , "\t|  ", n, " mode: ", mode, " strict: ", power) 
 
     def connections(self, all = True):
         r = []

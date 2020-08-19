@@ -4,15 +4,15 @@
 from .node import Node
 
 class Net(object):
-    value = ""
+    __name = ""
     nodes = []
     def __init__(self, name="Network"):
         self.nodes = dict()
-        self.value = name
+        self.__name = name
         print("[!] Created network ", name)
 
     def __str__(self):
-        return self.value
+        return self.__name
 
     def __getattr__(self, name):
         def function():
@@ -23,12 +23,12 @@ class Net(object):
         l = list()
         for n in self.nodes.values():
             if type(n) is Node:
-                l.append(n.value)
+                l.append(n.__name)
         return l
 
     def add(self, *nodes):
         for n in nodes:
-            self.nodes[n.value] = n
+            self.nodes[n.__name] = n
 
     def getNode(self, nodeName):
         return self.nodes[nodeName]
@@ -64,7 +64,6 @@ class Net(object):
                 r.append(elem)
         return r
         
-
     def __connected(self, a, b):
         for elem in a:
             for elemB in b:
@@ -103,13 +102,16 @@ class Net(object):
                 return False
         return True
 
-
     def drawPath(self, nodeA, nodeB, all_connections = True):
         path = self.areConnected(nodeA=nodeA, nodeB=nodeB, checked=[], nlist=[], all_connections=all_connections)
         if path == []:
-            print("No path has been found between ", nodeA.value, " and ", nodeB.value)
+            print("No path has been found between ", nodeA.__name, " and ", nodeB.__name)
             return
         
         print("Printing the path:")
         for i in range(len(path)-1):
+<<<<<<< Updated upstream:semawal/net.py
             print(path[i].value, "\t|  ", path[i].relationsWith(path[i+1]), "\t|  ", path[i+1].value)
+=======
+            print(path[i].__name, "\t|  ", path[i].relationsWith(path[i+1]), "\t|  ", path[i+1].__name)
+>>>>>>> Stashed changes:net.py
