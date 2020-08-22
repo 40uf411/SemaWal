@@ -376,10 +376,10 @@ class Node(object):
     #     return r
     
     # def check(self, attribute, node, mode=1):
-        rlnk = self.__r()
-        if attribute not in rlnk.keys():
-            return False
-        for nd in rlnk[attribute]:
-            if node == nd[0] and nd[1] == mode:
-                return True
-        return False
+    #    rlnk = self.__r()
+    #    if attribute not in rlnk.keys():
+    #        return False
+    #    for nd in rlnk[attribute]:
+    #        if node == nd[0] and nd[1] == mode:
+    #            return True
+    #    return False
