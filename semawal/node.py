@@ -4,7 +4,7 @@ class Node(object):
         """
         type in ["regular", "root", "leaf"]
         """
-        
+
         self.__name = name
         self.linksVersion = 0
         self.parentLinksVersion = -1
@@ -28,6 +28,9 @@ class Node(object):
         print("[!] Created node:", name)
 
     def __str__(self):
+        return self.__name
+
+    def __repr__(self):
         return self.__name
 
     def reset(self):

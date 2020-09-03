@@ -15,6 +15,9 @@ class Net(Node):
     def __str__(self):
         return self.__name
 
+    def __repr__(self):
+        return self.__name
+
     def __getattr__(self, name):
         def function():
             print("You tried to call a method named: %s" % name)
