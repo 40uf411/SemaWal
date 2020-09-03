@@ -4,7 +4,7 @@
 from .node import Node
 
 class Net(Node):
-    
+    ### the network is a node as well
     def __init__(self, name="Network"):
         super().__init__(name=name) 
         self.__name = name

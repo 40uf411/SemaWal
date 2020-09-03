@@ -4,6 +4,7 @@ class Node(object):
         """
         type in ["regular", "root", "leaf"]
         """
+        
         self.__name = name
         self.linksVersion = 0
         self.parentLinksVersion = -1

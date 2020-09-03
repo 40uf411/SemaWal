@@ -6,6 +6,7 @@ import os.path
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
     
+#importing classes
 from semawal.node import Node
 from semawal.net import Net
 n1 = Node("1", type="root", props={"p":1})
