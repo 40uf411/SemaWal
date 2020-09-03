@@ -40,9 +40,8 @@ In addition to extracting knowledge (mainly relations) between two or more nodes
 	
 ### In progress features
 * A GUI interface
-* Nodes properties
 * An option to ignore certain relations
-
+* 
 ### Usage
 ### install
 ```shell
@@ -58,21 +57,22 @@ pip install semawal
 >>> from semawal.net import Net
 >>> from semawal.csv_parser import parser
 ```
-## Examples
+---
+### SemaWal Node objects
+A node is the essential building block of a semantic network. A SemaWal node has a name, a type, and it can have a list of properties. A SemaWal node can extend another node, which will give it a copy of the parent node links.
+When linking two nodes, SamaWal saves the link on the node that is considered the start of the link.
+ In order to accelerate operations on the links, SemaWal stores the links in a local hidden node attribute,  and it generates a list of links that includes all the local links as well as the parent node links. This process will reduce the number of links calculation and thus accelerate operations like searching and tracking.
 
-Detailed examples and features in [test.py](tests/test.py) 
-
-*  Creating nodes
+#### Create a node
 ```python
->>> nodeA = Node(name="A")
+>>> nodeA = Node(name="Node A", props={"p1": "v1", "p2": "v2"}, type="root")
 [!] Created node A
 >>> nodeB = Node(name="B")
 [!] Created node B
->>> nodeC = Node(name="C")
+>>> nodeC = Node("C")
 [!] Created node C
 ```
-
-*  Linking two nodes
+#### Linking two nodes
 ```python
 >>> ## One-way relation: Ex: A has B
 >>> # mode (int): 0=negative, 1=positive
@@ -161,4 +161,6 @@ A       |   is  |   B  mode:  1  strict:  1
 Printing the path:
 A       |   ['is']      |   B
 ```
+## Examples
+Detailed examples and features in [test.py](tests/test.py) 
 
