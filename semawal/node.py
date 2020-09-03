@@ -46,6 +46,9 @@ class Node(object):
     def type(self):
         return self._type
 
+    def name(self): 
+        return self.__name
+
     def rename(self, newname):
         self.__name = newname
         return self
@@ -58,15 +61,46 @@ class Node(object):
         self.properties[key] = None
         return self
 
-    def getProp(self, key):
+    def getProp(self, key): 
         return self.properties[key]
 
-    def checkProp(self, key, value):
-        return (self.properties[key] == value)
+    def validateProps(self, pattern):
+        for pKey in pattern.keys():
+            if pKey not in self.properties: 
+                return False
+            else:
+                v = self.properties[pKey]
+                for condition in pattern[pKey]:
+                    if condition[0] == "==":
+                        if v != condition[1] : return False
+                    elif condition[0] == "!=":
+                        if v == condition[1] : return False
+                    elif condition[0] == ">=":
+                        if v < condition[1] : return False
+                    elif condition[0] == "<=":
+                        if v > condition[1] : return False
+                    elif condition[0] == ">":
+                        if v <= condition[1] : return False
+                    elif condition[0] == "<":
+                        if v >= condition[1] : return False
+        return True
 
     def parent(self):
         return self._parent
 
+    def root(self, depth=0):
+        d = 1
+        p = self.parent()
+        if p == None:
+            return None
+        else:
+            po = self;
+            while p != None and (depth<=0 or d<depth):
+                po = p
+                p = po.parent()
+                d=d+1
+            return po
+    
     def extends(self, node, generate = True):
         if node.type() == "leaf":
             print("[*] Node", node, " is of type 'leaf' and cannot make links.")
@@ -98,7 +132,7 @@ class Node(object):
         # tmp links
         tmp = dict() 
         # if parent's links has changed
-        if isinstance(self.parent(), Node) and self.parent().linksVersion != self.parentLinksVersion:
+        if isinstance(self.parent(), Node):
             # parent links
             self.staticLinks = tmp = self.parent().getLinks().copy()
             self.parentLinksVersion = self.parent().linksVersion
@@ -287,7 +321,7 @@ class Node(object):
     def getLinksAttributes(self):
         return list(self.getLinks().keys())
 
-    def getConnections(self, attributes=[], mode = -1, maxPower=10, minPower=0):
+    def getConnections(self, attributes=[], props = [], mode = -1, minPower=0, maxPower=10):
         tmp = list()
         lLinks = self.getLinks()
         attributes = attributes if attributes != [] else lLinks.keys()
@@ -295,6 +329,8 @@ class Node(object):
             if att not in attributes:
                 continue
             for elem in lLinks[att]:
+                if not elem[0].validateProps(props):
+                    continue
                 if mode in [1, 0] and elem[1] != mode:
                     continue
                 if elem[2] > maxPower or elem[2] < minPower:
@@ -312,6 +348,8 @@ class Node(object):
                     tmp.append(attribute)
                     break
         return tmp
+
+
 ##################################################
 # dead code (old code)
     # def __r(self):
