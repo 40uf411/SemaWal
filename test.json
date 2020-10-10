@@ -1,0 +1,19 @@
+{
+    "name": "Network", 
+    "desc": "This net is just an example of how you can use SemaWal", 
+    "type": "net",
+    "__comment__": "Comments like this one will not be included in the parsing process", 
+    "nodes": [
+        "node.json",
+        "test_node",
+        {"name": "1", "type": "root", "props": {"p": 1, "p2": 2}, "parent": null}, 
+        {"name": "2", "type": "regular", "props": {"s":4}, "parent": null}, 
+        {"name": "3", "type": "regular", "props": {}, "parent": null}, 
+        {"name": "4", "type": "regular", "props": {}, "parent": "1"}
+    ], 
+    "links": [
+        {"from": "1", "to": "2", "attribute": "test", "mode": 1, "power": 1}, 
+        {"from": "2", "to": "3", "attribute": "test", "mode": 1, "power": 3, "mutual": true}, 
+        {"from": "3", "to": "4", "attribute": "test", "mode": 1, "power": 1}
+    ]
+}

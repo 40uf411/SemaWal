@@ -1,0 +1,18 @@
+[
+    {
+        "method": "net.fetch",
+        "net" : "SemaWalNet",
+        "arg": {
+            "props": {},
+            "type": "all"
+        } 
+    },
+    {
+        "method": "net.fetch",
+        "net" : "SemaWalNet",
+        "arg": {
+            "props": {},
+            "type": "all"
+        } 
+    }
+]

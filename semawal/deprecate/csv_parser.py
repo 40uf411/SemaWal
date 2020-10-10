@@ -1,7 +1,10 @@
 #!/usr/bin/python
 # -*- coding=utf-8 -*-
-from .node import Node
-from .net import Net
+
+#WARNING! deprecated at version 0.2, replaced by a JSON parser.
+
+from ..node import Node
+from ..net import Net
 import csv
 import os
 import re

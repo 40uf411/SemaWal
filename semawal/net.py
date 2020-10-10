@@ -1,37 +1,30 @@
 #!/usr/bin/python
 # -*- coding=utf-8 -*-
-#TODO make it so that a node can have a relation with a network
 from .node import Node
 
 class Net(Node):
     ### the network is a node as well
-    def __init__(self, name="Network"):
-        super().__init__(name=name) 
+    def __init__(self, name="Network", description="", props={}, type="regular"):
+        super().__init__(name=name,props=props, type=type) 
         self.__name = name
+        self.__desc = description
+        self.__index = dict()
         self.__nodes = list()
         self.__roots = list()
+        self.__nets  = list()
         print("[!] Created network ", name)
 
-    def __str__(self):
-        return self.__name
-
-    def __getattr__(self, name):
-        def function():
-            print("You tried to call a method named: %s" % name)
-        return function
-
-    def name(self):
-        return self.__name
-
-    def rename(self, name):
-        self.__name = name
-        return self
-
+    def desc(self):
+        return self.__desc
+    
     def append(self, node):
         if node not in self.__nodes:
             self.__nodes.append(node)
+            self.__index[node.name()] = node
             if isinstance(node, Node) and node.type() == "root":
                 self.__roots.append(node)
+            if isinstance(node, Net):
+                self.__nets.append(node)
         return self
 
     def appendAll(self, nodes):
@@ -41,9 +34,11 @@ class Net(Node):
     def drop(self, node):
         if node in self.__nodes:
             self.__nodes.remove(node)
-
+            del self.__index[node.name()]
             if node in self.__roots:
                 self.__roots.remove(node)
+            if node in self.__nets:
+                self.__nets.remove(node)
         return self
 
     def roots(self):
@@ -52,9 +47,17 @@ class Net(Node):
     def nodes(self):
         return self.__nodes
 
+    def getNode(self, nodeName):
+        return self.__index[nodeName]
+    
+    def nets(self):
+        return self.__nets
+    
     def reset(self):
         self.__nodes=list()
         self.__roots=list()
+        self.__index=dict()
+        self.__nets=list()
         
     def showLinks(self, node=None):
         if node == None:
@@ -106,98 +109,3 @@ class Net(Node):
                     if path != None and len(path) != 0:
                         return [nodeA] + path
         return []
-
-# isinstance(props, dict)
-
-    # def getNodeskeys(self):
-    #     l = list()
-    #     for n in self.nodes.values():
-    #         if type(n) is Node:
-    #             l.append(n.__name)
-    #     return l
-
-    # def add(self, *nodes):
-    #     for n in nodes:
-    #         self.nodes[n.__name] = n
-
-    # def getNode(self, nodeName):
-    #     return self.nodes[nodeName]
-
-    # def search(self, node, depth=2, visited_nodes = []):
-    #     if type(node) is str:
-    #         node = self.getNode(node)
-    #     node.showLinks()
-    #     visited_nodes.append(node)
-    #     items = self.nodes.values()
-    #     if depth > 0:
-    #         for elem in node.connections():
-    #             if type(node) is Net:
-    #                 continue
-    #             if elem in items and elem not in visited_nodes:
-    #                 visited_nodes = self.search(elem, depth=(depth-1), visited_nodes=visited_nodes)
-    #     return visited_nodes
-
-    # def randomSearch(self, returnstr = False):
-    #     visited_nodes = []
-    #     items = self.nodes.values()
-    #     for node in items:
-    #         if type(node) is Net:
-    #             continue
-    #         if node in items and node not in visited_nodes:
-    #             visited_nodes = self.search(node, depth=0, visited_nodes=visited_nodes)
-    
-    # def filter(self, alist):
-    #     r = list()
-    #     items = self.nodes.values()
-    #     for elem in alist:
-    #         if elem in items:
-    #             r.append(elem)
-    #     return r
-        
-    # def __connected(self, a, b):
-    #     for elem in a:
-    #         for elemB in b:
-    #             if elem == elemB:
-    #                 return [elem]
-    #     return []
-
-    # def areConnected(self, nodeA, nodeB, nlist = [], ignore = [], checked = [], all_connections=True):
-    #     items = self.nodes.values()
-    #     if nodeA not in items or nodeB not in items:
-    #         return []
-    #     if nodeA == nodeB:
-    #         return [nodeA]
-
-    #     checked.append(nodeA)
-
-    #     nlist = self.filter(list(nodeA.connections(all=all_connections)))
-        
-    #     for elem in nlist:
-    #         if elem in checked:
-    #             continue
-    #         if nodeB in elem.connections(all=all_connections):
-    #             return [nodeA, elem, nodeB]
-    #         r = self.areConnected(elem, nodeB, all_connections=all_connections)
-    #         if r != []:
-    #             return [nodeA] + r
-    #     return []
-
-    # def isLinkedBy(self, nodeA, link, nodeB, all_connection = True):
-    #     path = self.areConnected(nodeA=nodeA, nodeB=nodeB, checked=[], nlist=[], all_connections=all_connection)
-    #     if path == []:
-    #         return False
-        
-    #     for i in range(len(path)-1):
-    #         if ( link not in path[i].relationsWith(path[i+1])):
-    #             return False
-    #     return True
-
-    # def drawPath(self, nodeA, nodeB, all_connections = True):
-    #     path = self.areConnected(nodeA=nodeA, nodeB=nodeB, checked=[], nlist=[], all_connections=all_connections)
-    #     if path == []:
-    #         print("No path has been found between ", nodeA.__name, " and ", nodeB.__name)
-    #         return
-        
-    #     print("Printing the path:")
-    #     for i in range(len(path)-1):
-    #         print(path[i].__name, "\t|  ", path[i].relationsWith(path[i+1]), "\t|  ", path[i+1].__name)

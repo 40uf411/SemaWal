@@ -1,0 +1,31 @@
+{
+    "name": "SemaWalNet",
+    "desc": "This net is just an example of how you can use SemaWal",
+    
+    "nodes": {
+        "__comment__": "Comments like this one will not be included in the parsing process",
+
+        "node1": "node.json",
+        "node2": "node2",
+        "node3": {
+            "name": "node3",
+            "type": "root",
+            "props": {
+                "size": "13ko",
+                "year": 1999 
+            },
+            "parent": "node1"
+        }
+    },
+
+    "links": [
+        {
+            "from": "node1",
+            "to": "node2",
+            "attribute": "link",
+            "mutual": true,
+            "mode": 1,
+            "power": 5
+        }
+    ]
+}

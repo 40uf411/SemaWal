@@ -1,0 +1,11 @@
+{
+    "type": "node",
+    "node": {
+        "name": "Node1",
+        "type": "leaf",
+        "props": {
+            "size": "13ko",
+            "year": 1999 
+        }
+    }
+}

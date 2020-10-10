@@ -9,28 +9,36 @@ sys.path.append(
 #importing classes
 from semawal.node import Node
 from semawal.net import Net
-n1 = Node("1", type="root", props={"p":1})
-n2 = Node("2")
-n3 = Node("3")
-n4 = Node("4")
+# n1 = Node("1", type="root", props={"p":1, "p2": 2})
+# n2 = Node("2")
+# n3 = Node("3")
+# n4 = Node("4")
 
 # n4.extends(n3)
 # n3.extends(n2)
 # n2.extends(n1)
 
-n1.link("test", n2)
-n2.link("test", n3)
-n3.link("test", n4)
+# n1.link("test", n2)
+# n2.link("test", n3)
+# n3.link("test", n4)
 
 #n4.showLinks()
 
 
-nt = Net()
-nt.appendAll([n1, n2, n3, n4])
+# nt = Net()
+# nt.appendAll([n1, n2, n3, n4])
 
-nt.link("test", n1)
-#nt.showLinks()
-print(nt.fetchFrom(n1, depth=2, allowedAttributes=['test']))
+# nt.link("test", n1)
+# #nt.showLinks()
+# print(nt.fetchFrom(n1, depth=2, allowedAttributes=['test']))
+
+from semawal.json_parser import Parser
+# print("exporting -------------------------")
+# Parser.export(nt, "test.json")
+
+net = Parser.read("test.json")
+net.showLinks()
+print(net.getNode("1").getProperties())
 # n = Node("node", props={
 #     "p1": 5,
 #     "p2": 10,

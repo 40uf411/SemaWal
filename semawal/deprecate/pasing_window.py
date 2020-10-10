@@ -1,7 +1,12 @@
+#!/usr/bin/python
+# -*- coding=utf-8 -*-
+
+#WARNING! deprecated at version 0.2, replaced by a web interface.
+
 import tkinter as Tk
-from node import Node
-from net import Net
-from csv_parser import parser
+from ..node import Node
+from ..net import Net
+from .csv_parser import parser
 
 ########################################################################
 class OtherFrame(Tk.Toplevel):

@@ -30,6 +30,14 @@ class Node(object):
     def __str__(self):
         return self.__name
 
+    def __repr__(self):
+        return self.__name
+        
+    def __getattr__(self, name):
+        def function():
+            print("You tried to call a method named: %s" % name)
+        return function
+    
     def reset(self):
         self.linksVersion = 0
         self.parentLinksVersion = -1
@@ -54,6 +62,9 @@ class Node(object):
         self.__name = newname
         return self
 
+    def getProperties(self):
+        return self.properties
+    
     def addProp(self, key, value):
         self.properties[key] = value
         return self
@@ -95,7 +106,7 @@ class Node(object):
         if p == None:
             return None
         else:
-            po = self;
+            po = self
             while p != None and (depth<=0 or d<depth):
                 po = p
                 p = po.parent()
@@ -111,6 +122,11 @@ class Node(object):
             print('[*] Node ', self.name, " can't extend another node since it already has links with other nodes.")
             return self
         self._parent = node
+        p = node.getProperties()
+        for prop in self.properties.keys():
+            p[prop] = self.properties[prop]
+        self.properties = p
+        
         if generate:
             self.generateStaticLinks()
         self.parentLinksVersion = node.linksVersion
@@ -339,7 +355,7 @@ class Node(object):
                 tmp.append(elem[0])
         return list(set(tmp))
     
-    def getRelationesWith(self, node):
+    def getRelationsWith(self, node):
         lLinks = self.getLinks()
         attributes = lLinks.keys()
         tmp = list()
@@ -350,75 +366,48 @@ class Node(object):
                     break
         return tmp
 
-
-##################################################
-# dead code (old code)
-    # def __r(self):
-    #     d = dict()
-
-    #     for relation in self.legacy.keys():
-    #         if relation not in d.keys():
-    #             d[relation] = list()
-    #     for relation in self.links.keys():
-    #         if relation not in d.keys():
-    #             d[relation] = list()
-
-    #     for relation in self.legacy.keys():
-    #         for elem in self.legacy[relation]:
-    #             d[relation].append(elem)
-
-    #     for relation in self.links.keys():
-    #         for elem in self.links[relation]:
-    #             b = True
-    #             for e in d[relation]:
-    #                 if e[0] != elem[0]:
-    #                     continue
-    #                 if  e[2] == 1:
-    #                     b = False
-    #                     break
-    #                 else:
-    #                     e[1] = elem[1]
-    #                     e[2] = elem[2]
-    #                     b = False
-    #                     break
-    #             if b:
-    #                 d[relation].append(elem)
-    #     return d
-
-    # def r(self):
-    #     return self.__r()
-
-    # def check_relation(self, r1, r2):
-    #     if r1[0] != r2[0]:
-    #         return 0
-    #     if r2[2] == 1:
-    #         return -1
-    #     return 1
-
-    # def connections(self, all = True):
-    #     r = []
-    #     rlnk = self.__r()
-    #     for key in rlnk.keys():
-    #         for elem in rlnk[key]:
-    #             if not all and elem[1] == 0:
-    #                 continue
-    #             r.append(elem[0])
-    #     return set(r)
-
-    # def relationsWith(self, node):
-    #     r = []
-    #     rlnk = self.__r()
-    #     for key in rlnk.keys():
-    #         for nd in rlnk[key]:
-    #             if node in nd:
-    #                 r.append(key)
-    #     return r
-    
-    # def check(self, attribute, node, mode=1):
-    #    rlnk = self.__r()
-    #    if attribute not in rlnk.keys():
-    #        return False
-    #    for nd in rlnk[attribute]:
-    #        if node == nd[0] and nd[1] == mode:
-    #            return True
-    #    return False
+    def checkPattern(self, pattern, ignoreList=[]):
+        pattern = [
+            {
+                "num": 5,
+                "attributes": ["Test"],
+                "props": {
+                    "p1": [["<", 10], [">", 9]]
+                },
+                "mode": -1,
+                "minPower": 0,
+                "maxPower": 10
+                
+            }
+        ]
+        if(len(pattern) == 0):
+            return []
+        else:
+            if pattern[0]["num"] > 0:
+                nodes = self.getConnections(attributes= pattern[0]["attributes"], 
+                                            props=      pattern[0]["props"], 
+                                            mode=       pattern[0]["mode"], 
+                                            minPower=   pattern[0]["minPower"],
+                                            maxPower=   pattern[0]["maxPower"])
+                if pattern[0]["num"] == 1:
+                    pattern.pop(0)
+                if(len(pattern) == 0):       
+                    return nodes
+                else:
+                    pass
+                    #TODO check stat one with nodes
+            else: # pattern[0] < 0
+                # check for "stat 0" of the pattern
+                nodes_0 = self.getConnections(attributes= pattern[0]["attributes"], 
+                                              props=      pattern[0]["props"], 
+                                              mode=       pattern[0]["mode"], 
+                                              minPower=   pattern[0]["minPower"],
+                                              maxPower=   pattern[0]["maxPower"])
+                #TODO check stat 0 with nodes in node_0
+                # check for the next stat
+                nodes_1 = self.getConnections(attributes= pattern[1]["attributes"], 
+                                              props=      pattern[1]["props"], 
+                                              mode=       pattern[1]["mode"], 
+                                              minPower=   pattern[1]["minPower"],
+                                              maxPower=   pattern[1]["maxPower"])
+                #TODO check stat 1 with
