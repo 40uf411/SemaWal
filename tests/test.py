@@ -9,6 +9,69 @@ sys.path.append(
 #importing classes
 from semawal.node import Node
 from semawal.net import Net
+# Level 0
+n0 = Node("0")
+# Level 1
+n1_0 = Node("1_0")
+n1_1 = Node("1_1")
+n0.link("test0", n1_0)
+n0.link("test1", n1_1)
+# Level 2
+n2_0 = Node("2_0")
+n2_1 = Node("2_1")
+n1_0.link("test0", n2_0)
+n1_0.link("test1", n2_1)
+
+n2_2 = Node("2_2")
+n2_3 = Node("2_3")
+n1_1.link("test0", n2_2)
+n1_1.link("test1", n2_3)
+# Level 3
+n3_0 = Node("3_0")
+n3_1 = Node("3_1")
+n2_0.link("test0", n3_0)
+n2_0.link("test1", n3_1)
+
+n3_2 = Node("3_2")
+n3_3 = Node("3_3")
+n2_1.link("test0", n3_2)
+n2_1.link("test1", n3_3)
+
+n3_4 = Node("3_4")
+n3_5 = Node("3_5")
+n2_2.link("test0", n3_4)
+n2_2.link("test1", n3_5)
+
+n3_6 = Node("3_6")
+n3_7 = Node("3_7")
+n2_3.link("test0", n3_6)
+n2_3.link("test1", n3_7)
+
+# Test
+print("#"*20, "test")
+t=n0.checkPattern([
+    {
+        "num":-1,
+        "attributes": ["test1"],
+        "props": {},
+        "mode": -1,
+        "minPower": 0,
+        "maxPower":10
+    }
+])
+print("t= ", t)
+# pattern = [
+#     {
+#         "num": 5,
+#         "attributes": ["Test"],
+#         "props": {
+#             "p1": [["<", 10], [">", 9]]
+#         },
+#         "mode": -1,
+#         "minPower": 0,
+#         "maxPower": 10
+#     }
+# ]
 # n1 = Node("1", type="root", props={"p":1, "p2": 2})
 # n2 = Node("2")
 # n3 = Node("3")
@@ -32,13 +95,13 @@ from semawal.net import Net
 # #nt.showLinks()
 # print(nt.fetchFrom(n1, depth=2, allowedAttributes=['test']))
 
-from semawal.json_parser import Parser
+# from semawal.json_parser import Parser
 # print("exporting -------------------------")
 # Parser.export(nt, "test.json")
 
-net = Parser.read("test.json")
-net.showLinks()
-print(net.getNode("1").getProperties())
+# net = Parser.read("test.json")
+# net.showLinks()
+# print(net.getNode("1").getProperties())
 # n = Node("node", props={
 #     "p1": 5,
 #     "p2": 10,

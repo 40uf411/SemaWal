@@ -367,47 +367,44 @@ class Node(object):
         return tmp
 
     def checkPattern(self, pattern, ignoreList=[]):
-        pattern = [
-            {
-                "num": 5,
-                "attributes": ["Test"],
-                "props": {
-                    "p1": [["<", 10], [">", 9]]
-                },
-                "mode": -1,
-                "minPower": 0,
-                "maxPower": 10
-                
-            }
-        ]
+        ignoreList.append(self)
         if(len(pattern) == 0):
             return []
         else:
+            paths = list()
+            nodes = self.getConnections(attributes= pattern[0]["attributes"], 
+                                        props=      pattern[0]["props"], 
+                                        mode=       pattern[0]["mode"], 
+                                        minPower=   pattern[0]["minPower"],
+                                        maxPower=   pattern[0]["maxPower"])
             if pattern[0]["num"] > 0:
-                nodes = self.getConnections(attributes= pattern[0]["attributes"], 
-                                            props=      pattern[0]["props"], 
-                                            mode=       pattern[0]["mode"], 
-                                            minPower=   pattern[0]["minPower"],
-                                            maxPower=   pattern[0]["maxPower"])
                 if pattern[0]["num"] == 1:
                     pattern.pop(0)
-                if(len(pattern) == 0):       
-                    return nodes
+                if(len(pattern) == 0):  
+                    return [[self,node] for node in nodes and node not in ignoreList]
                 else:
-                    pass
-                    #TODO check stat one with nodes
+                    pattern[0]["num"] = pattern[0]["num"]-1
+                    for node in nodes:
+                        if node not in ignoreList:
+                            paths.append(node.checkPattern(pattern=pattern, ignoreList=ignoreList))
             else: # pattern[0] < 0
                 # check for "stat 0" of the pattern
-                nodes_0 = self.getConnections(attributes= pattern[0]["attributes"], 
-                                              props=      pattern[0]["props"], 
-                                              mode=       pattern[0]["mode"], 
-                                              minPower=   pattern[0]["minPower"],
-                                              maxPower=   pattern[0]["maxPower"])
-                #TODO check stat 0 with nodes in node_0
-                # check for the next stat
-                nodes_1 = self.getConnections(attributes= pattern[1]["attributes"], 
-                                              props=      pattern[1]["props"], 
-                                              mode=       pattern[1]["mode"], 
-                                              minPower=   pattern[1]["minPower"],
-                                              maxPower=   pattern[1]["maxPower"])
-                #TODO check stat 1 with
+                for node in nodes:
+                    if node not in ignoreList:
+                        paths.append(node.checkPattern(pattern=pattern, ignoreList=ignoreList))
+                
+                if(len(pattern) > 1): 
+                    # check for the next stat
+                    nodes_1 = self.getConnections(attributes= pattern[1]["attributes"], 
+                                                  props=      pattern[1]["props"], 
+                                                  mode=       pattern[1]["mode"], 
+                                                  minPower=   pattern[1]["minPower"],
+                                                  maxPower=   pattern[1]["maxPower"])
+                    for node in nodes:
+                        if node not in ignoreList:
+                            paths.append(node.checkPattern(pattern=pattern[2:], ignoreList=ignoreList))
+            if(len(paths) > 0):
+                return [[self] + path for path in paths]
+            else:
+                return [self]
+                    
