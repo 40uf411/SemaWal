@@ -50,6 +50,7 @@ SemaWal provides useful network defining functions and knowledge extraction func
 	- initial release
 ### In progress features
 * A GUI interface
+* A web interface
 * An option to ignore certain relations
 
 ---
