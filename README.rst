@@ -39,7 +39,7 @@ Features:
 -  Path finding.
 -  Static graph generation.
 
-**Full documentation:** [https://40uf411.github.io/SemaWal/](https://40uf411.github.io/SemaWal/)
+**Full documentation:** https://40uf411.github.io/SemaWal/
 
 Changelog:
 ----------

@@ -9,7 +9,7 @@ def readme():
     with open('README.rst', encoding="utf8") as f:
         return f.read()
 
-setup (name='semawal', version='0.2.0',
+setup (name='semawal', version='0.2.2',
       description="SemaWal: Semantic Network Resolver",
       long_description = readme(),      
 
