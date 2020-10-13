@@ -37,6 +37,9 @@ SemaWal provides useful network defining functions and knowledge extraction func
 * Advanced filtered search.
 * Path finding.
 * Static graph generation.
+
+
+**Full documentation:** [https://40uf411.github.io/SemaWal/](https://40uf411.github.io/SemaWal/)
 ---
 ### Changelog:
 #### 0.2(20.10)
@@ -52,5 +55,3 @@ SemaWal provides useful network defining functions and knowledge extraction func
 * A GUI interface
 * A web interface
 * An option to ignore certain relations
-
-**Full documentation:** [https://40uf411.github.io/SemaWal/](https://40uf411.github.io/SemaWal/)
