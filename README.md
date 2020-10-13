@@ -1,5 +1,5 @@
 # SemaWal Semantic network resolver
-![SemaWal logo](logo.png)
+![SemaWal logo](logo1.png)
 
 SemaWal is a semantic network resolver in python
 ![PyPI - version](https://img.shields.io/pypi/v/semawal)
