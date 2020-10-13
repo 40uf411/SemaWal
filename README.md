@@ -2,6 +2,8 @@
 ![SemaWal logo](logo.png)
 
 SemaWal is a semantic network resolver in python
+![PyPI - version](https://img.shields.io/pypi/v/semawal)
+![PyPI - license](https://img.shields.io/pypi/l/semawal)
 
 Developper:  Ali AOUF
 
