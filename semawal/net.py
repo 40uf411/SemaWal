@@ -16,7 +16,10 @@ class Net(Node):
 
     def desc(self):
         return self.__desc
-    
+
+    def setDesc(self, description):
+        self.__desc=description
+        
     def append(self, node):
         if node not in self.__nodes:
             self.__nodes.append(node)

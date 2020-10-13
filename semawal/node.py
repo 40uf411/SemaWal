@@ -53,7 +53,7 @@ class Node(object):
         print("[!] Node '", self, "' has been reseted.")
     
     def type(self):
-        return self._type
+        return str(self._type)
 
     def name(self): 
         return self.__name
@@ -63,7 +63,7 @@ class Node(object):
         return self
 
     def getProperties(self):
-        return self.properties
+        return dict(self.properties)
     
     def addProp(self, key, value):
         self.properties[key] = value
@@ -136,7 +136,7 @@ class Node(object):
     def getLinks(self, generate = True):
         if generate:
             self.generateStaticLinks()
-        return self.staticLinks
+        return dict(self.staticLinks)
     
     def commit(self):
         return self.generateStaticLinks()

@@ -60,6 +60,7 @@ t=n0.checkPattern([
     }
 ])
 print("t= ", t)
+print(n0.getRelationsWith(n1_0))
 # pattern = [
 #     {
 #         "num": 5,
