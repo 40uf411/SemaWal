@@ -4,10 +4,7 @@
 </div>
 SemaWal is a semantic network resolver in python
 
-<!--![arrand logo](doc/arrand_header.png  "arrand logo")-->
-<!--![PyPI - Downloads](https://img.shields.io/pypi/dm/arrand)-->
-
-  Developper:  Ali AOUF
+Developper:  Ali AOUF
 
 Features |   value
 ---------|---------------------------------------------------------------------------------

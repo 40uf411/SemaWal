@@ -9,12 +9,12 @@ def readme():
     with open('README.rst', encoding="utf8") as f:
         return f.read()
 
-setup (name='semawal', version='0.4',
-      description="Semawal: Semantic Network Resolver",
+setup (name='semawal', version='0.2',
+      description="SemaWal: Semantic Network Resolver",
       long_description = readme(),      
 
       author='Ali Aouf',
-      author_email='ali.aouf@gmail.com',
+      author_email='40uf4l1@gmail.com',
       url='https://40uf411.github.io/SemaWal/',
       license='GPL',
       package_dir={'semawal': 'semawal'},
