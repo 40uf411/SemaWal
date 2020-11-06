@@ -12,7 +12,7 @@ Features |   value
 Authors  | [Authors.md](https://github.com/40uf411/SemaWal/master/AUTHORS.md)
 Release  | 0.2 (20.10)
 License  |[GPL](https://github.com/40uf411/SemaWal/master/LICENSE)
-Tracker  |[40uf411/arrand/Issues](https://github.com/40uf411/SemaWal/issues)
+Tracker  |[40uf411/SemaWal/Issues](https://github.com/40uf411/SemaWal/issues)
 Source  |[Github](http://github.com/40uf411/SemaWal)
 Feedbacks  |[Comments](https://github.com/40uf411/SemaWal/)
 Accounts  |[@Twitter](https://twitter.com/40uf411)
