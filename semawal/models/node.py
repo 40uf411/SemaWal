@@ -1,11 +1,26 @@
 import uuid
+import time
+import threading
+# import the thread pool executor
+from concurrent.futures import ThreadPoolExecutor
 # Generate node model
 class Node:
     # static variable of index type
-    CONNECTION_TO_NODES = 0
-    NODE_TO_CONNECTIONS = 1 
+    EDGE_TO_NODES = 0
+    NODE_TO_EDGES = 1 
+    # private variables
+    _id = None
+    _name = None
+    _description = None
+    _attributes = None
+    _type = None
+    _parent = None
+    _children = None
+    _compiled_edge_nodes_index = None
+    _compiled_node_edges_index= None
+    _num_workers = None
     # magic methods
-    def __init__(self, name, description, attributes, parent = None) -> None:
+    def __init__(self, name, description, type, attributes, parent = None, num_workers = 4) -> None:
         """Generate a node object.
         Args:
             name ([str]): Name of the node.
@@ -13,31 +28,33 @@ class Node:
             attributes ([dict]): Attributes of the node.
             parent ([Node], optional): Parent node. Defaults to None.
         """
-        self.__id = str(uuid.uuid4())
-        self.__name = name if type(name) is str else ''
-        self.__description = description if type(description) is str else ''
-        self.__attributes = attributes if type(attributes) is dict else {}
-        self.__parent = parent if type(parent) is Node else None
-        self.__children = []
-        self.__connections = {}
-        self.__compiled_connection_nodes_index = {}
-        self.__compiled_node_connections_index = {}
-        self.__tmp = {
+        self._id = str(uuid.uuid4())
+        self._name = name if isinstance(name, str) else ''
+        self._description = description if isinstance(description, str) else ''
+        self._attributes = attributes if isinstance(attributes, dict) else {}
+        self._type = type if isinstance(type, str) else 'regular'
+        self._parent = parent
+        self._children = []
+        self._compiled_edge_nodes_index = {}
+        self._compiled_node_edges_index = {}
+        self._num_workers = num_workers if isinstance(num_workers, int) else 4
+        self._tmp = {
             "key": "",
             "power": 1,
             "allow": True,
             "props": {}
         }
+
     def __str__(self):
         """String representation of the node.
         Returns: [str]
         """
-        return "%:%" % (self.__id, self.__name)
+        return "%:%" % (self._id, self._name)
     def __repr__(self):
         """String representation of the node.
         Returns: [str]
         """
-        return self.__str__()
+        return self._str__()
     def __setattr__(self, name, value):
         """Set the node attribute.
         Args:
@@ -54,31 +71,45 @@ class Node:
         """
         return False
 
+    # Checkers
+    def is_parent (self, node) -> bool:
+        """check is a node appears in the node parent of parent
+        Args:
+            node ([type]): Node to check.
+        Returns:
+            bool: True if the node is a parent.
+        """
+        if self._parent is None:
+            return False
+        if self._parent == node:
+            return True
+        return self._parent.is_parent(node)
+
     # Getters
     def get_id(self) -> str:
         """Get the node id.
         Returns:
             str: Node id.
         """
-        return self.__id
+        return self._id
     def get_name(self) -> str:
         """Get the node name.
         Returns:
             str: Node name.
         """
-        return self.__name
+        return self._name
     def get_description(self) -> str:
         """Get the node description.
         Returns:
             str: Node description.
         """
-        return self.__description
+        return self._description
     def get_attributes(self) -> dict:
         """Get the node attributes.
         Returns:
             dict: Node attributes.
         """
-        return self.__attributes
+        return self._attributes
     def get_attribute(self, key) -> any:
         """Get the node attribute.
         Args:
@@ -86,88 +117,134 @@ class Node:
         Returns:
             dict: Node attribute.
         """
-        return self.__attributes[key] if key in self.__attributes else None
-    def get_parent(self) -> Node:
+        return self._attributes[key] if key in self._attributes else None
+    def get_type(self) -> str:
+        """Get the node type.
+        Returns:
+            str: Node type.
+        """
+        return self._type
+    def get_parent(self) -> any:
         """Get the node parent.
         Returns:
             Node: Node parent.
         """
         return self.__parent
+    def get_root(self) -> any:
+        """Get the root node.
+        Returns:
+            Node: Root node.
+        """
+        return self if self._parent is None else self._parent.get_root()
     def get_children(self) -> list:
         """Get the node children.
         Returns:
             list: Node children.
         """
-        return self.__children
-    def get_connections(self, index=0) -> dict:
-        """Get the node connections.
+        return self._children
+    def get_edges(self, index=0) -> dict:
+        """Get the node edges.
         Returns:
-            dict: Node connections.
+            dict: Node edges.
         """
         if index == 0:
-            return self.__compiled_connection_nodes_index
+            return self._compiled_edge_nodes_index
         else:
-            return self.__compiled_node_connections_index
+            return self._compiled_node_edges_index
+    def get_num_workers(self) -> int:
+        """Get the node number of workers.
+        Returns:
+            int: Node number of workers.
+        """
+        return self._num_workers
 
     # Setters
-    def set_name(self, name) -> None:
+    def set_name(self, name: str) -> None:
         """Set the node name.
         Args:
             name ([str]): Name of the node.
         """
-        self.__name = name if type(name) is str else ''
-    def set_description(self, description) -> None:
+        self._name = name
+    def set_description(self, description: str) -> None:
         """Set the node description.
         Args:
             description ([str]): Description of the node.
         """
-        self.__description = description if type(description) is str else ''
-    def set_attributes(self, attributes) -> None:
+        self._description = description
+    def set_attributes(self, attributes: dict) -> None:
         """Set the node attributes.
         Args:
             attributes ([dict]): Attributes of the node.
         """
-        self.__attributes = attributes if type(attributes) is dict else {}
+        self._attributes = attributes
     def set_attribute(self, key, value) -> None:
         """Set the node attribute.
         Args:
             key ([str]): Attribute key.
             value ([any]): Attribute value.
         """
-        self.__attributes[key] = value
+        self._attributes[key] = value
+    def set_type(self, type) -> None:
+        """Set the node type.
+        Args:
+            type ([str]): Type of the node.
+        """
+        self._type = type if type in ['root', 'leaf', 'regular'] else 'regular'
+        if self._type == 'root':
+            self._parent = None
+        elif self._type == 'leaf':
+            for child in self._children:
+                child.drop_parent()
+            self._children = []
     def set_parent(self, parent) -> None:
         """Set the node parent.
         Args:
             parent ([Node]): Parent node.
         """
-        self.__parent = parent if type(parent) is Node else None
-
+        if parent is None or not isinstance(parent, Node):
+            return
+        # Check if adding the parent is not a circular reference
+        if self._type == 'root' or parent.get_type() == 'leaf' or parent.is_parent(self):
+            return
+        self._parent = parent
+        # Add the node to the parent children
+        self._parent.add_child(self)
+    def set_num_workers(self, num_workers: int) -> None:
+        """Set the node number of workers.
+        Args:
+            num_workers ([int]): Number of workers.
+        """
+        self._num_workers = num_workers
     # Adders
     def add_child(self, child) -> None:
         """Add a child to the node.
         Args:
             child ([Node]): Child node.
         """
-        self.__children.append(child)
-    def add_connection(self, key, node, power = 1, allow = True, props = {}) -> None:
-        """Add a connection to the node.
+        if child is None or not isinstance(child, Node):
+            return
+        self._children.append(child)
+    def add_edge(self, key: str, node, power: int = 1, allow: bool = True, props: dict = {}) -> None:
+        """Add a edge to the node.
         Args:
-            key ([str]): Connection key.
-            node ([Node]): Connection node.
-            power ([int], optional): Connection power. Defaults to 1.
-            allow ([bool], optional): Connection allow. Defaults to True.
-            props ([dict], optional): Connection properties. Defaults to {}.
+            key ([str]): EDGE key.
+            node ([Node]): EDGE node.
+            power ([int], optional): EDGE power. Defaults to 1.
+            allow ([bool], optional): EDGE allow. Defaults to True.
+            props ([dict], optional): EDGE properties. Defaults to {}.
         """
-        if key in self.__connections:
-            if node.get_id() not in self.__connections[key].keys():
-                self.__connections[key][node.get_id()] = {
+        if node is None or not isinstance(node, Node):
+            return
+        if key in self._edges:
+            if node.get_id() not in self._edges[key].keys():
+                self._edges[key][node.get_id()] = {
                     'power': power,
                     'allow': allow,
                     'props': props,
                     'node': node
                 }
         else:
-            self.__connections[key] = {
+            self._edges[key] = {
                 node.get_id(): {
                     'power': power,
                     'allow': allow,
@@ -175,18 +252,18 @@ class Node:
                     'node': node
                 }
             }
-        self.__tmp = {
+        self._tmp = {
             "power": power,
             "allow": allow,
             "props": props,
             'node': node
         }
     def and_with(self, node) -> None:
-        """Add a connection to the node (this function uses the add_connection method).
+        """Add a edge to the node (this function uses the add_edge method).
         Args:
-            node ([Node]): Connection node.
+            node ([Node]): EDGE node.
         """
-        self.add_connection(self.__tmp['key'], node, self.__tmp['power'], self.__tmp['allow'], self.__tmp['props'])
+        self.add_edge(self._tmp['key'], node, self._tmp['power'], self._tmp['allow'], self._tmp['props'])
 
     # Droppers
     def drop_child(self, child) -> None:
@@ -194,40 +271,43 @@ class Node:
         Args:
             child ([Node]): Child node.
         """
-        self.__children.remove(child)
-    def drop_attribute(self, key) -> None:
+        self._children.remove(child)
+    def drop_attribute(self, key: str) -> None:
         """Drop the node attribute.
         Args:
             key ([str]): Attribute key.
         """
-        if key in self.__attributes:
-            del self.__attributes[key]
-    def drop_connection(self, key, node) -> None:
-        """Drop the node connection.
+        if key in self._attributes:
+            del self._attributes[key]
+    def drop_edge(self, key: str, node) -> None:
+        """Drop the node edge.
         Args:
-            key ([str]): Connection key.
+            key ([str]): EDGE key.
         """
-        if key in self.__connections and node.get_id() in self.__connections[key]:
-            self.__connections[key].remove(node.get_id())
+        if key in self._edges and node.get_id() in self._edges[key]:
+            self._edges[key].remove(node.get_id())
     def drop_parent(self) -> None:
         """Drop the node parent.
         """
-        self.__parent = None
+        self._parent = None
+        self._parent.drop_child(self)
 
     # recetters
     def reset(self, full_reset = False) -> None:
         """Reset the node to default values.
         """
         if full_reset:
-            self.__name = ""
-            self.__description = ""
-            self.__attributes = {}
-        self.__parent = None
-        self.__children = []
-        self.__connections = {}
-        self.__compiled_connection_nodes_index = {}
-        self.__compiled_node_connections_index = {}
-        self.__tmp = {
+            self._name = ""
+            self._description = ""
+            self._type = "regular"
+            self._attributes = {}
+        self._parent = None
+        self._children = []
+        self._edges = {}
+        self._compiled_edge_nodes_index = {}
+        self._compiled_node_edges_index = {}
+        self._num_workers = 4
+        self._tmp = {
             "key": "",
             "power": 1,
             "allow": True,
@@ -238,37 +318,35 @@ class Node:
     def commit(self) -> None:
         """Commit the node changes.
         """
-        tmp_connections = {}
-        # check if the parent is not none, if so, get the parent connections
-        if self.__parent is not None:
-            tmp_connections = self.__parent.get_connections()
-        # loop over the connections
-        for connection_name, connections in self.__connections:
-            for node_id, connection in connections.items():
-                # check if the connection with the node is in the parent connections
-                if connection_name not in tmp_connections.keys() or node_id not in tmp_connections[connection_name]:
-                    if connection_name not in tmp_connections.keys():
-                        tmp_connections[connection_name] = {
-                            node_id: connection
+        tmp_edges = self.get_parent.get_edges() if self.get_parent() is not None else {}
+        # loop over the edges
+        for edge_name, edges in self._edges:
+            for node_id, edge in edges.items():
+                # check if the edge with the node is in the parent edges
+                if edge_name not in tmp_edges.keys() or node_id not in tmp_edges[edge_name]:
+                    if edge_name not in tmp_edges.keys():
+                        tmp_edges[edge_name] = {
+                            node_id: edge
                         }
                     else:
-                        # if not, add the connection
-                        tmp_connections[connection_name][node_id] = connection
-                elif connection['power'] > tmp_connections[connection_name][node_id]['power']:
-                    # if so, replace the parent connection with the current connection
-                    tmp_connections[connection_name][node_id] = connection
-        # set the compiled connections
-        self.__compiled_connection_nodes_index = tmp_connections
-        # compile the connections index
-        self.__compiled_node_connections_index = {}
-        for connection_name, connections in self.__compiled_connection_nodes_index.items():
-            for node_id, connection in connections.items():
-                if node_id in self.__compiled_node_connections_index:
-                    self.__compiled_node_connections_index[node_id][connection_name] = connection
+                        # if not, add the edge
+                        tmp_edges[edge_name][node_id] = edge
+                elif edge['power'] > tmp_edges[edge_name][node_id]['power']:
+                    # if so, replace the parent edge with the current edge
+                    tmp_edges[edge_name][node_id] = edge
+        # set the compiled edges
+        self._compiled_edge_nodes_index = tmp_edges
+        # compile the edges index
+        self._compiled_node_edges_index = {}
+        for edge_name, edges in self._compiled_edge_nodes_index.items():
+            for node_id, edge in edges.items():
+                if node_id in self._compiled_node_edges_index:
+                    self._compiled_node_edges_index[node_id][edge_name] = edge
                 else:                    
-                    self.__compiled_node_connections_index[node_id] = {
-                        connection_name: connection
+                    self._compiled_node_edges_index[node_id] = {
+                        edge_name: edge
                     }
-        # notify the children
-        for child in self.__children:
-            child.commit()
+        # notify the children in a thread pool
+        pool = ThreadPoolExecutor(self._num_workers)
+        for child in self._children:
+            pool.submit(child.commit)
