@@ -29,14 +29,20 @@ class Network:
             value ([any]): Attribute value.
         Returns: [bool]
         """
-        return False
+        if not name.startswith('_'):
+            return False
+        # set the attribute
+        self.__dict__[name] = value
     def __delattr__(self, name) -> bool:
         """Drop the network attribute.
         Args:
             name ([str]): Attribute key.
         Returns: [bool]
         """
-        return False
+        if not name.startswith('_'):
+            return False
+        # drop the attribute
+        del self.__dict__[name]
     def __iter__(self)-> any:
         """Iterate over the clusters.
         Returns: [Iterator]

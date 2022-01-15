@@ -7,18 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 class Node:
     # static variable of index type
     EDGE_TO_NODES = 0
-    NODE_TO_EDGES = 1 
+    NODE_TO_EDGES = 1
     # private variables
-    _id = None
-    _name = None
-    _description = None
-    _attributes = None
-    _type = None
-    _parent = None
-    _children = None
-    _compiled_edge_nodes_index = None
-    _compiled_node_edges_index= None
-    _num_workers = None
     # magic methods
     def __init__(self, name, description, type, attributes, parent = None, num_workers = 4) -> None:
         """Generate a node object.
@@ -44,7 +34,6 @@ class Node:
             "allow": True,
             "props": {}
         }
-
     def __str__(self):
         """String representation of the node.
         Returns: [str]
@@ -62,14 +51,22 @@ class Node:
             value ([any]): Attribute value.
         Returns: [bool]
         """
-        return False
+        # check is the attribute is private
+        if not name.startswith('_'):
+            return False
+        # set the attribute
+        self.__dict__[name] = value
     def __delattr__(self, name):
         """Drop the node attribute.
         Args:
             name ([str]): Attribute key.
         Returns: [bool]
         """
-        return False
+        # check is the attribute is private
+        if not name.startswith('_'):
+            return False
+        # drop the attribute
+        del self.__dict__[name]
 
     # Checkers
     def is_parent (self, node) -> bool:
@@ -350,3 +347,16 @@ class Node:
         pool = ThreadPoolExecutor(self._num_workers)
         for child in self._children:
             pool.submit(child.commit)
+
+if __name__ == "__main__":
+    n = Node(
+    name="A",
+    description="A node",
+    type="root",
+    attributes = {
+        "key": "value"
+    },
+    parent = None,
+    num_workers = 4
+) 
+    print(n.get_name())

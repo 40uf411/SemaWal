@@ -16,32 +16,40 @@ class Cluster:
         self.__edge_target_index = {}
         self.__node_type_index = {}
     def __str__(self) -> str:
-        """String representation of the node.
+        """String representation of the cluster.
         Returns: [str]
         """
         return "%:%" % (self.__id, self.__name)
     def __repr__(self) -> str:
-        """String representation of the node.
+        """String representation of the cluster.
         Returns: [str]
         """
         return self.__str__()
-    def __setattr__(self, name, value) -> bool:
-        """Set the node attribute.
+    def __setattr__(self, name, value):
+        """Set the cluster attribute.
         Args:
             name ([str]): Attribute name.
             value ([any]): Attribute value.
         Returns: [bool]
         """
-        return False
-    def __delattr__(self, name) -> bool:
-        """Drop the node attribute.
+        # check is the attribute is private
+        if not name.startswith('_'):
+            return False
+        # set the attribute
+        self.__dict__[name] = value
+    def __delattr__(self, name):
+        """Drop the cluster attribute.
         Args:
             name ([str]): Attribute key.
         Returns: [bool]
         """
-        return False
+        # check is the attribute is private
+        if not name.startswith('_'):
+            return False
+        # drop the attribute
+        del self.__dict__[name]
     def __iter__(self)-> any:
-        """Iterate over the nodes.
+        """Iterate over the cluster.
         Returns: [Iterator]
         """
         return iter(self.__nodes)
