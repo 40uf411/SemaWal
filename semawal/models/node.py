@@ -24,7 +24,11 @@ class Node:
         self._attributes = attributes if isinstance(attributes, dict) else {}
         self._type = type if isinstance(type, str) else 'regular'
         self._parent = parent
+        set_parent = self.set_parent(parent)
+        if set_parent not in ['ERROR: parent node is null.', 'OK']:
+            raise Exception(set_parent)
         self._children = []
+        self._edges = {}
         self._compiled_edge_nodes_index = {}
         self._compiled_node_edges_index = {}
         self._num_workers = num_workers if isinstance(num_workers, int) else 4
@@ -38,7 +42,7 @@ class Node:
         """String representation of the node.
         Returns: [str]
         """
-        return "%:%" % (self._id, self._name)
+        return "%s:%s" % (self._id, self._name)
     def __repr__(self):
         """String representation of the node.
         Returns: [str]
@@ -126,7 +130,7 @@ class Node:
         Returns:
             Node: Node parent.
         """
-        return self.__parent
+        return self._parent
     def get_root(self) -> any:
         """Get the root node.
         Returns:
@@ -193,19 +197,25 @@ class Node:
             for child in self._children:
                 child.drop_parent()
             self._children = []
-    def set_parent(self, parent) -> None:
+    def set_parent(self, parent) -> str:
         """Set the node parent.
         Args:
             parent ([Node]): Parent node.
         """
-        if parent is None or not isinstance(parent, Node):
-            return
-        # Check if adding the parent is not a circular reference
-        if self._type == 'root' or parent.get_type() == 'leaf' or parent.is_parent(self):
-            return
+        if parent is None:
+            return 'ERROR: parent node is null.'
+        elif not isinstance(parent, Node):
+            return 'ERROR: parent node is not a node.'
+        elif self._type == 'root':
+            return 'ERROR: node is a root node.'
+        elif parent.get_type() == 'leaf':
+            return 'ERROR: parent node is a leaf node.'
+        elif parent.is_parent(self):
+            return 'ERROR: parent node is circular reference.'
         self._parent = parent
         # Add the node to the parent children
         self._parent.add_child(self)
+        return 'OK'
     def set_num_workers(self, num_workers: int) -> None:
         """Set the node number of workers.
         Args:
@@ -268,7 +278,11 @@ class Node:
         Args:
             child ([Node]): Child node.
         """
-        self._children.remove(child)
+        if child is None or not isinstance(child, Node):
+            return
+        if child in self._children:
+            self._children.remove(child)
+            child.drop_parent()
     def drop_attribute(self, key: str) -> None:
         """Drop the node attribute.
         Args:
@@ -282,12 +296,14 @@ class Node:
             key ([str]): EDGE key.
         """
         if key in self._edges and node.get_id() in self._edges[key]:
-            self._edges[key].remove(node.get_id())
+            # Remove the edge from the node
+            del self._edges[key][node.get_id()]
     def drop_parent(self) -> None:
         """Drop the node parent.
         """
-        self._parent = None
-        self._parent.drop_child(self)
+        if self._parent is not None:
+            self._parent.drop_child(self)
+            self._parent = None
 
     # recetters
     def reset(self, full_reset = False) -> None:
@@ -315,9 +331,9 @@ class Node:
     def commit(self) -> None:
         """Commit the node changes.
         """
-        tmp_edges = self.get_parent.get_edges() if self.get_parent() is not None else {}
+        tmp_edges = self._parent.get_edges() if self._parent is not None else {}
         # loop over the edges
-        for edge_name, edges in self._edges:
+        for edge_name, edges in self._edges.items():
             for node_id, edge in edges.items():
                 # check if the edge with the node is in the parent edges
                 if edge_name not in tmp_edges.keys() or node_id not in tmp_edges[edge_name]:
@@ -346,17 +362,61 @@ class Node:
         # notify the children in a thread pool
         pool = ThreadPoolExecutor(self._num_workers)
         for child in self._children:
-            pool.submit(child.commit)
+            pool.submit(child.commit())
 
 if __name__ == "__main__":
-    n = Node(
+    # create a node "a" with type root and no parent
+    node_a = Node(
     name="A",
     description="A node",
     type="root",
+    attributes = {"a"
+        "key": "value"
+    },
+    parent = None,
+    num_workers = 4)
+    # create a node "b" with type regular and no parent
+    node_b = Node(
+    name="B",
+    description="B node",
+    type="regular",
+    attributes = {
+        "key": "value"
+    },
+    parent = node_a,
+    num_workers = 4)
+    # create a node "c" with type regular and no parent
+    node_c = Node(
+    name="C",
+    description="C node",
+    type="regular",
+    attributes = {
+        "key": "value"
+    },
+    parent = node_b,
+    num_workers = 4)
+    # create a node "d" with type leaf and parent "a"
+    node_d = Node(
+    name="D",
+    description="D node",
+    type="leaf",
+    attributes = {
+        "key": "value"
+    },
+    parent = node_c,
+    num_workers = 4)
+
+    # create a node "e" with type leaf and no parent
+    node_e = Node(
+    name="E",
+    description="E node",
+    type="leaf",
     attributes = {
         "key": "value"
     },
     parent = None,
-    num_workers = 4
-) 
-    print(n.get_name())
+    num_workers = 4)
+    # add a edge from "a" to "e"
+    node_a.add_edge("edge_a", node_e, 1, True, {"key": "value"})
+    node_a.commit()
+    print(node_d.get_root())
