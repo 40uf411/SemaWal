@@ -1,4 +1,5 @@
 import uuid
+import copy
 import time
 import threading
 # import the thread pool executor
@@ -92,25 +93,25 @@ class Node:
         Returns:
             str: Node id.
         """
-        return self._id
+        return copy.deepcopy(self._id)
     def get_name(self) -> str:
         """Get the node name.
         Returns:
             str: Node name.
         """
-        return self._name
+        return copy.deepcopy(self._name)
     def get_description(self) -> str:
         """Get the node description.
         Returns:
             str: Node description.
         """
-        return self._description
+        return copy.deepcopy(self._description)
     def get_attributes(self) -> dict:
         """Get the node attributes.
         Returns:
             dict: Node attributes.
         """
-        return self._attributes
+        return copy.deepcopy(self._attributes)
     def get_attribute(self, key) -> any:
         """Get the node attribute.
         Args:
@@ -118,19 +119,19 @@ class Node:
         Returns:
             dict: Node attribute.
         """
-        return self._attributes[key] if key in self._attributes else None
+        return copy.deepcopy(self._attributes[key]) if key in self._attributes else None
     def get_type(self) -> str:
         """Get the node type.
         Returns:
             str: Node type.
         """
-        return self._type
+        return copy.deepcopy(self._type)
     def get_parent(self) -> any:
         """Get the node parent.
         Returns:
             Node: Node parent.
         """
-        return self._parent
+        return copy.deepcopy(self._parent)
     def get_root(self) -> any:
         """Get the root node.
         Returns:
@@ -142,22 +143,22 @@ class Node:
         Returns:
             list: Node children.
         """
-        return self._children
+        return copy.deepcopy(self._children)
     def get_edges(self, index=0) -> dict:
         """Get the node edges.
         Returns:
             dict: Node edges.
         """
         if index == 0:
-            return self._compiled_edge_nodes_index
+            return copy.deepcopy(self._compiled_edge_nodes_index)
         else:
-            return self._compiled_node_edges_index
+            return copy.deepcopy(self._compiled_node_edges_index)
     def get_num_workers(self) -> int:
         """Get the node number of workers.
         Returns:
             int: Node number of workers.
         """
-        return self._num_workers
+        return copy.deepcopy(self._num_workers)
 
     # Setters
     def set_name(self, name: str) -> None:
@@ -331,7 +332,7 @@ class Node:
     def commit(self) -> None:
         """Commit the node changes.
         """
-        tmp_edges = self._parent.get_edges() if self._parent is not None else {}
+        tmp_edges = copy.deepcopy(self._parent.get_edges()) if self._parent is not None else {}
         # loop over the edges
         for edge_name, edges in self._edges.items():
             for node_id, edge in edges.items():
