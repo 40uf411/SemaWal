@@ -1,4 +1,6 @@
 # SemaWal Semantic network resolver
+* Currently working on the stable v1 which probably will be the last release.
+
 ![SemaWal logo](logo1.png)
 
 SemaWal is a semantic network resolver in python
