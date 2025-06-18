@@ -29,15 +29,16 @@ SemaWal provides useful network defining functions and knowledge extraction func
 * Support for multi-relations(connections between nodes).
 * Support for extend relation(inheritance).
 * Support for positive and negative relations.
-* Support for JSON files.
+* Support for JSON files for network creation.
 * Support for node properties.
 * Support for Sub-networks.
 * Relations extraction.
-* Pattern checking.
-* Advanced filtered search.
-* Path finding.
-* Static graph generation.
-
+* Pattern checking (Beta).
+* Advanced filtered search for nodes and connections.
+* Path finding between nodes.
+* Option to ignore specific relations during traversal, pathfinding, and connection retrieval.
+* Export network structure to DOT format for Graphviz visualization.
+* Static graph generation (related to DOT export).
 
 **Full documentation:** [https://40uf411.github.io/SemaWal/](https://40uf411.github.io/SemaWal/)
 
@@ -55,4 +56,3 @@ SemaWal provides useful network defining functions and knowledge extraction func
 ### In progress features
 * A GUI interface
 * A web interface
-* An option to ignore certain relations
